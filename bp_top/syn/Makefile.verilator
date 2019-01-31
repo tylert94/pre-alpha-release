@@ -1,0 +1,65 @@
+## Tools
+VV = $(VERILATOR_PATH)/bin/verilator
+
+CPPFLAGS += -I$(BP_ME_PATH)/test/include -I$(BP_ME_PATH)/src/include/c
+
+VV_OPTS +=-I$(BP_BE_PATH)/v -I$(BP_BE_PATH)/tb/common -I$(BP_COMMON_PATH) 
+VV_OPTS +=-I$(BP_BE_PATH)/bp_dcache/include -I$(BP_BE_PATH)/bp_dcache/v
+VV_OPTS +=-I$(BP_BE_PATH)/bp_dcache/testing/v
+VV_OPTS +=-I$(BP_BE_PATH)/tb/rom
+VV_OPTS +=-I$(BP_ME_PATH)/src/v/cce -I$(BP_ME_PATH)/test/common -I$(BP_ME_PATH)/src/include/v
+VV_OPTS +=-I$(BP_ME_PATH)/src/v/network -I$(BP_ME_PATH)/src/v/roms
+VV_OPTS +=-I$(BSG_IP_PATH)/bsg_dataflow -I$(BSG_IP_PATH)/bsg_mem -I$(BSG_IP_PATH)/bsg_noc
+VV_OPTS +=-I$(BSG_IP_PATH)/bsg_misc -I$(BSG_IP_PATH)/bsg_test
+VV_OPTS +=-I$(BP_FE_PATH)/src/include
+VV_OPTS +=--trace -O3
+VV_OPTS +=-Wno-unoptflat # Verilator has problems with false positive combinatorial
+						 #   loop detection e.g. bit 0 drives bit 1 of struct
+VV_OPTS +=-Wno-width -Wno-unused
+VV_OPTS +=-Wno-lint
+
+#CC_OPTS +=-I$(VERILATOR_PATH)/include 
+#CC_OPTS +=-I$(SYSTEMC_PATH)/include -L$(SYSTEMC_PATH)/lib-linux64 -lm -lsystemc
+
+TEST_ROM  ?= hello_world_rom.v
+LOAD_ROM  ?= bp_be_boot_rom.v
+
+TEST_ROM_C  = $(notdir $(TEST_ROM))
+LOAD_ROM_C  = $(notdir $(LOAD_ROM))
+
+HDL_SOURCE +=\
+$(BP_TOP_PATH)/test/rom/v/$(TEST_ROM)
+
+#$(BP_BE_TOP)/tb/common/bp_multi_wrapper.v
+
+SC_TOP_MODULE = bp_multi_wrapper
+
+SC_TB_PATH = $(BP_TOP_PATH)/test/tb
+
+## Export variables to subcommands
+export
+
+## Targets
+lint.sc:
+	$(eval HDL_SOURCE += $(BP_ME_PATH)/src/v/roms/demo-v2/bp_cce_inst_rom_demo-v2_lce1_wg16_assoc8.v)
+	$(eval include $(BP_BE_PATH)/tb/v/$(SC_TOP_MODULE)/Makefile.frag)
+	$(VV) $(VV_OPTS) --lint-only $(HDL_SOURCE) --top-module $(SC_TOP_MODULE) $(HDL_PARAMS)
+
+load_rom.sc: $(HDL_SOURCE)
+	if [ "$(TEST_ROM_C)" != "$(LOAD_ROM_C)" ]; then						    \
+		ln -sf $(BP_TOP_PATH)/test/rom/v/$(TEST_ROM_C) $(BP_TOP_PATH)/test/rom/v/$(LOAD_ROM_C);	\
+	fi;
+
+%.build.sc: clean load_rom.sc
+	$(eval include $(SC_TB_PATH)/$*/Makefile.frag)
+	$(eval TOP_MODULE ?= $*)
+	$(VV) $(VV_OPTS) --top-module $(TOP_MODULE) --sc $(HDL_SOURCE) $(HDL_PARAMS) \
+		--exe $(SC_TB_PATH)/$*/test_bp.cpp \
+	&& make -C obj_dir -f V$(TOP_MODULE).mk \
+	&& cp obj_dir/V$(TOP_MODULE) $(SC_TB_PATH)/$*/simsc
+
+%.run.sc: %.build.sc
+	$(eval include $(SC_TB_PATH)/$*/Makefile.frag)
+	$(SC_TB_PATH)/$*/simsc $(HDL_PARAMS) > $(SC_TB_PATH)/$*/simout.txt
+
+

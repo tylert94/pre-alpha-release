@@ -15,3 +15,5 @@ HDL_PARAMS=-pvalue+vaddr_width_p=22 			                           \
 		   -pvalue+boot_rom_width_p=512									   \
 
 HDL_SOURCE += $(BP_ME_PATH)/src/v/roms/demo-v2/bp_cce_inst_rom_demo-v2_lce2_wg16_assoc8.v
+
+TOP_MODULE = bp_multi_wrapper

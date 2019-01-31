@@ -13,7 +13,7 @@
 #include "systemc.h"
 #include "verilated_vcd_sc.h"
 
-#include "Vbp_multi_top.h"
+#include "Vbp_multi_wrapper.h"
 
 void print_header(std::string dut, std::map<std::string, std::string>& arg_map)
 {
@@ -59,7 +59,7 @@ int sc_main(int argc, char **argv)
     sc_clock             clk("clk", 10, SC_NS);
     sc_signal <bool>     reset("reset");
 
-    Vbp_be_nonsynth_mock_fe_top_wrapper DUT("DUT");
+    Vbp_multi_wrapper DUT("DUT");
     DUT.clk_i(clk);
     DUT.reset_i(reset);
 
