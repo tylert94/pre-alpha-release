@@ -40,7 +40,7 @@ $BSG_IP_CORES_DIR/bsg_mem/bsg_mem_1r1w_sync.v
 $BSG_IP_CORES_DIR/bsg_mem/bsg_mem_1r1w_sync_synth.v
 $BSG_IP_CORES_DIR/bsg_mem/bsg_mem_1r1w_synth.v
 $BSG_IP_CORES_DIR/bsg_mem/bsg_mem_1rw_sync.v
-$BSG_IP_CORES_DIR/bsg_mem/bsg_mem_1rw_sync_mask_write_bit.v
+$BSG_IP_CORES_DIR/hard/saed90/bsg_mem/bsg_mem_1rw_sync_mask_write_bit.v
 $BSG_IP_CORES_DIR/bsg_mem/bsg_mem_1rw_sync_mask_write_bit_synth.v
 $BSG_IP_CORES_DIR/bsg_mem/bsg_mem_1rw_sync_mask_write_byte.v
 $BSG_IP_CORES_DIR/bsg_mem/bsg_mem_1rw_sync_mask_write_byte_synth.v
