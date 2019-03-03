@@ -127,16 +127,23 @@ module bp_cce_dir
       );
 
   // read valid registers
-  logic entry_v_r, wg_v_r;
+  logic entry_v_r, wg_v_r, entry_v_n, wg_v_n; 
+
   always_ff @(posedge clk_i) begin
-    entry_v_r <= '0;
-    wg_v_r <= '0;
+    entry_v_r <= entry_v_n;
+    wg_v_r <= wg_v_n;
+  end 
+
+  always_comb begin
     if (r_v_i & (r_cmd_i == e_rde_op)) begin
-      entry_v_r <= 1'b1;
-    end
+      entry_v_n <= 1'b1;
+    end else 
+      wg_v_n <= 1'b0;
+
     if (wg_ram_r_v) begin
-      wg_v_r <= 1'b1;
-    end
+      wg_v_n <= 1'b1;
+    end else 
+      wg_v_n <= 1'b0;
   end
 
   logic [tag_set_width_lp-1:0] tag_set;
