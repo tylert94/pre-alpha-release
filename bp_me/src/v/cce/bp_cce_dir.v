@@ -136,14 +136,14 @@ module bp_cce_dir
 
   always_comb begin
     if (r_v_i & (r_cmd_i == e_rde_op)) begin
-      entry_v_n <= 1'b1;
+      entry_v_n = 1'b1;
     end else 
-      wg_v_n <= 1'b0;
+      wg_v_n = 1'b0;
 
     if (wg_ram_r_v) begin
-      wg_v_n <= 1'b1;
+      wg_v_n = 1'b1;
     end else 
-      wg_v_n <= 1'b0;
+      wg_v_n = 1'b0;
   end
 
   logic [tag_set_width_lp-1:0] tag_set;
