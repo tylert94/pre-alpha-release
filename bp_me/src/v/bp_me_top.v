@@ -236,6 +236,13 @@ module bp_me_top
         ,.mem_data_cmd_yumi_i(mem_data_cmd_yumi_i[i])
        );
 
+  wire gated_clock;
+  
+  clock_gating_circuit gate1(.valid_pulse(mem_cmd_v_o[i]), .response_pulse(mem_data_resp_v_i[i])
+                          , .clk_i_i(clk_i), .clk_i_o(gated_clock) );
+
+
+
     bp_mem
       #(.num_lce_p(num_lce_p)
         ,.num_cce_p(num_cce_p)
@@ -248,7 +255,7 @@ module bp_me_top
         ,.boot_rom_els_p(boot_rom_els_p)
        )
        bp_mem
-       (.clk_i(clk_i)
+        (.clk_i(gated_clock)
         ,.reset_i(reset_i)
         ,.mem_cmd_i(mem_cmd_o[i])
         ,.mem_cmd_v_i(mem_cmd_v_o[i])
@@ -269,3 +276,25 @@ module bp_me_top
   end
 
 endmodule
+
+
+module clock_gating_circuit(
+  input logic valid_pulse, response_pulse, clk_i_i,
+  output logic clk_i_o
+
+);
+
+logic w1, w2, w3;
+
+always_ff @(posedge clk_i_i) begin
+  w3 <= w2;
+
+end 
+
+assign w1 = valid_pulse + response_pulse;
+assign w2 = w1 ^ w3;
+assign clk_i_o = clk_i_i & w3;
+
+
+endmodule 
+
