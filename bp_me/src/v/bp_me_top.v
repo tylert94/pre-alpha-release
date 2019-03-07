@@ -1,6 +1,6 @@
 /**
  *  bp_me_top.v
- */ 
+ */
 
 module bp_me_top
   import bp_common_pkg::*;
@@ -93,6 +93,26 @@ module bp_me_top
   logic [num_cce_p-1:0]                                         lce_data_cmd_v_o_from_cce;
   logic [num_cce_p-1:0]                                         lce_data_cmd_ready_i_to_cce;
 
+  logic [num_lce_p-1:0][bp_lce_cce_data_resp_width_lp-1:0]             lce_data_resp_i_tx;
+  logic [num_lce_p-1:0]                                                lce_data_resp_v_i_tx;
+  logic [num_lce_p-1:0]                                                lce_data_resp_ready_o_tx;
+
+  bp_serial_packet_transfer #(
+      .data_width_p(bp_lce_cce_data_resp_width_lp)
+      ,.num_packets_p(8)
+      ,.els_p(num_lce_p)
+  ) lce_data_resp_i_tx (
+      .clk_i(clk_i)
+      ,.reset_i(reset_i)
+
+      ,.valid_i(lce_data_resp_v_i)
+      ,.data_i(lce_data_resp_i)
+      ,.ready_o(lce_resp_ready_o)
+
+      ,.valid_o(lce_data_resp_v_i_tx)
+      ,.data_o(lce_data_resp_i_tx)
+      ,.yumi_i(lce_data_resp_ready_o_tx)
+  );
 
   // Coherence Network
   bp_coherence_network #(
@@ -147,9 +167,9 @@ module bp_me_top
 
     // LCE Data Response Network - (LCE->network->CCE)
     // (LCE side)
-    ,.lce_data_resp_i(lce_data_resp_i)
-    ,.lce_data_resp_v_i(lce_data_resp_v_i)
-    ,.lce_data_resp_ready_o(lce_data_resp_ready_o)
+    ,.lce_data_resp_i(lce_data_resp_i_tx)
+    ,.lce_data_resp_v_i(lce_data_resp_v_i_tx)
+    ,.lce_data_resp_ready_o(lce_data_resp_ready_o_tx)
     // (CCE side)
     ,.lce_data_resp_o(lce_data_resp_i_to_cce)
     ,.lce_data_resp_v_o(lce_data_resp_v_i_to_cce)

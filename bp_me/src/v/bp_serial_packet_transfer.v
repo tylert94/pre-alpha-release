@@ -1,6 +1,9 @@
-module bp_serial_packet_transfer # ( parameter data_width_p = "inv"
-                                   , parameter num_packets_p  = "inv"
-                                   , parameter els_p          = "inv"
+//TODO: calculate packet_width_p based on data_width_p and num_packets_p
+
+module bp_serial_packet_transfer # ( parameter data_width_p    = "inv"
+                                   , parameter num_packets_p   = "inv"
+                                   , parameter els_p           = "inv"
+                                   , localparam packet_width_p = (data_width_p+num_packets_p-1)/num_packets_p
                                    )
     ( input clk_i
     , input reset_i
@@ -28,7 +31,7 @@ module bp_serial_packet_transfer # ( parameter data_width_p = "inv"
           data_o[i][(j+1)*packet_width_p-1:(j)*packet_width_p] = data_o_rx[i][j];
         end
         data_i_tx[i][num_packets_p-1] = data[i][data_width_p-1:(num_packets_p-1)*packet_width_p]; // Maybe I don't care what happens on the extra bits of this signal?
-        data_o[i][data_width_p-1:(num_packets_p-1)*packet_width_p] = data_o_rx[i][data_width_p-((num_packets_p-1)*packet_width_p)-1:0];
+        data_o[i][data_width_p-1:(num_packets_p-1)*packet_width_p] = data_o_rx[i][num_packets_p-1][data_width_p-((num_packets_p-1)*packet_width_p)-1:0];
       end
     end
 
