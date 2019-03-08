@@ -12,7 +12,7 @@
 # be includes
 +incdir+$BP_BE_DIR/src/include
 +incdir+$BP_BE_DIR/src/include/bp_be_dcache
-# me includes 
+# me includes
 +incdir+$BP_ME_DIR/src/include/v
 ## Packages
 # bsg_ip_cores packages
@@ -73,6 +73,7 @@ $BSG_IP_CORES_DIR/bsg_noc/bsg_mesh_router_buffered.v
 ## ME files
 $BP_ME_DIR/test/common/bp_cce_test.v
 $BP_ME_DIR/src/v/bp_me_top.v
+$BP_ME_DIR/src/v/bp_serial_packet_transfer.v
 $BP_ME_DIR/test/common/bp_mem.v
 # Note: This should be a testing rom, because it varies per testbench
 # You must change it for testbenches with different numbers of lce
