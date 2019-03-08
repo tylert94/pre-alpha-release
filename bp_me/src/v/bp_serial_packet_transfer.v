@@ -22,6 +22,7 @@ module bp_serial_packet_transfer # ( parameter data_width_p    = "inv"
     logic [els_p-1:0]                                         v_o_tx;
 
     logic [els_p-1:0][num_packets_p-1:0][packet_width_p-1:0]  data_o_rx;
+    logic [els_p-1:0]                                         yumi_rx;
 
     always_comb
     begin
