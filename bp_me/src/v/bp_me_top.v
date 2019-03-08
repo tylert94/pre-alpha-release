@@ -101,13 +101,13 @@ module bp_me_top
       .data_width_p(bp_lce_cce_data_resp_width_lp)
       ,.num_packets_p(8)
       ,.els_p(num_lce_p)
-  ) lce_data_resp_i_tx (
+  ) lce_data_resp_i_transfer (
       .clk_i(clk_i)
       ,.reset_i(reset_i)
 
       ,.valid_i(lce_data_resp_v_i)
       ,.data_i(lce_data_resp_i)
-      ,.ready_o(lce_resp_ready_o)
+      ,.ready_o(lce_data_resp_ready_o)
 
       ,.valid_o(lce_data_resp_v_i_tx)
       ,.data_o(lce_data_resp_i_tx)

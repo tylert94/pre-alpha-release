@@ -66,6 +66,7 @@ $BSG_IP_CORES_DIR/bsg_misc/bsg_priority_encode_one_hot_out.v
 $BSG_IP_CORES_DIR/bsg_misc/bsg_round_robin_arb.v
 $BSG_IP_CORES_DIR/bsg_misc/bsg_scan.v
 $BSG_IP_CORES_DIR/bsg_noc/bsg_mesh_router.v
+$BSG_IP_CORES_DIR/bsg_dataflow/bsg_parallel_in_serial_out.v
 $BSG_IP_CORES_DIR/bsg_noc/bsg_mesh_router_buffered.v
 ## BE files
 # Common
@@ -73,6 +74,7 @@ $BSG_IP_CORES_DIR/bsg_noc/bsg_mesh_router_buffered.v
 ## ME files
 $BP_ME_DIR/test/common/bp_cce_test.v
 $BP_ME_DIR/src/v/bp_me_top.v
+$BP_ME_DIR/src/v/bsg_serial_in_parallel_out_full.v
 $BP_ME_DIR/src/v/bp_serial_packet_transfer.v
 $BP_ME_DIR/test/common/bp_mem.v
 # Note: This should be a testing rom, because it varies per testbench
